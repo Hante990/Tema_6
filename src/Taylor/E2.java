@@ -8,9 +8,9 @@ package Taylor;
  *
  * @author alons
  */
-public class E1 {
- public static void main(String[] args) {
-        // Ecuación diferencial: dy/dx = x^2 - y
+public class E2 {
+  public static void main(String[] args) {
+        // Ecuación diferencial: dy/dx = 2x - y
         // Condiciones iniciales: y(0) = 1
         double x0 = 0, y0 = 1, x, y, h = 0.025, xEnd = 0.1;
         int n = (int)((xEnd - x0) / h);
@@ -32,6 +32,6 @@ public class E1 {
     }
     
     public static double dydx(double x, double y) {
-        return x * x - y;
+        return 2 * x - y;
     }
 }
