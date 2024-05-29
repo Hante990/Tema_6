@@ -20,7 +20,7 @@ Los métodos de Euler, Taylor y Runge-Kutta son herramientas numéricas para res
   
 Existen varios métodos para resolver ecuaciones diferenciales, cada uno con sus propias características y aplicaciones. Algunos de los más comunes son:
   <li>1.-Euler</li>
-  <li>2.- Runge-Kutta</li>
+  <li>2.-Runge-Kutta</li>
   <li>3.-Taylor</li>
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -32,118 +32,137 @@ Existen varios métodos para resolver ecuaciones diferenciales, cada uno con sus
 El método de Euler es un método iterativo simple y rápido para resolver EDOs. Se basa en la aproximación de la pendiente en un punto y se utiliza para calcular el valor de la variable en el siguiente paso. El método de Euler es de orden 1, lo que significa que el error por paso es del orden de ℎ, donde ℎ es el tamaño del paso. Aunque es rápido, el método de Euler puede ser inestable y no es adecuado para problemas que requieren una alta precisión.   
 <h5> <font font face = "arial"> <b> <i> Ejemplo en código. </i> </b> </h5>
 
-    public class Ejercicio4 {
-    public static double interpolate(double[] x, double[] y, double xTarget) {
-        int n = x.length;
-        double yTarget = 0;
+    /*
+      * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+      * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+    */
+    package Euler;
 
-        int i = 0;
-        while (i < n - 1 && x[i] < xTarget) {
-            i++;
-        }
+     /**
+     *
+     * @author alons
+    */
+      public class E1 {
 
-        if (i == 0) {
-            yTarget = y[0];
-        } else if (i == n - 1) {
-            yTarget = y[n - 1];
-        } else {
-            double x0 = x[i - 1];
-            double x1 = x[i];
-            double y0 = y[i - 1];
-            double y1 = y[i];
-
-            double m = (y1 - y0) / (x1 - x0);
-            double b = y0 - m * x0;
-            yTarget = m * xTarget + b;
-        }
-
-        return yTarget;
-    }
-
-    public static void main(String[] args) {
-    double[] x = {0.8, 1.6, 2.8, 3.2, 4.6};
-    double[] y = {1.2, 3.2, 5.2, 7.2, 9.2};
-    double xTarget = 2.0;
-    double yTarget = interpolate(x, y, xTarget);
-    System.out.println("El valor de y para x = " + xTarget + " es " + yTarget);
-     }
-    }
-
-  ![Lineal](https://github.com/Hante990/Interpolaci-n2/assets/107586879/0037a026-e06c-45ce-8827-166931a2d22e)
-
-<h2 align = "center"> <font font face = "forte">  <a name="Cuadratica"> 2.- Interpolación cuadratica </a></h2>
-
-<h3> <font font face = "arial"> DESCRIPCIÓN: </h3>
-
-La interpolación cuadrática es una herramienta útil en la aproximación de funciones suaves y en la predicción de valores intermedios entre puntos conocidos. Sin embargo, es importante tener en cuenta que su uso debe ser cuidadoso para evitar problemas de sobreajuste y garantizar la validez de los resultados obtenidos.
-   
-<h5> <font font face = "arial"> <b> <i> Ejemplo en código. </i> </b> </h5>
-
-    public class Interpolacion_Cuadratica {
-
-    public static void main(String[] args) {
-        System.out.println("Solucion de ecuaciones cuadráticas");
-        double a, b, c, x1, x2, producto, cuadrado, diferencia, raiz;
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Ingresa el coeficiente a");
-        a = scanner.nextDouble();
-        System.out.println("Ingresa el coeficiente b");
-        b = scanner.nextDouble();
-        System.out.println("Ingresa el coeficiente c");
-        c = scanner.nextDouble();
-
-        cuadrado = Math.pow(b, 2);
-        producto = 4 * a * c;
-        diferencia = cuadrado - producto;
-        raiz = Math.sqrt(diferencia);
-
-        x1 = (-b + raiz) / (2 * a);
-        x2 = (-b - raiz) / (2 * a);
-
-        System.out.println("La ecuacion es: " + a + "x^2 + " + b + "x + " + c + " = 0");
-        System.out.println("Las raices son:");
-        System.out.println("El valor de x1 es: " + x1);
-        System.out.println("El valor de x2 es: " + x2);
-      }
-    } 
+     public static void main(String[] args) {
+        // Ecuación diferencial: dy/dx = (x + y + xy)
+        // Condiciones iniciales: y(0) = 1
+        double x0 = 0, y0 = 1, x, y, h = 0.025, xEnd = 0.1;
+        int n = (int)((xEnd - x0) / h);
+        
+        x = x0;
+        y = y0;
+        
+        System.out.println("x\ty");
+        System.out.println(x + "\t" + y);
+        
+        for (int i = 0; i < n; i++) {
+            y = y + h * dydx(x, y);
+            x = x + h;
+            System.out.println(x + "\t" + y);
+         }
+       }
     
-  ![Cua](https://github.com/Hante990/Interpolaci-n2/assets/107586879/88a62d83-01c4-421a-a441-54eec1a2f964)
+        public static double dydx(double x, double y) {
+        return x + y + x * y;
+          }
+       }
+![Screenshot 2024-05-28 232923](https://github.com/Hante990/Tema_6/assets/107586879/d2b28a67-3dcc-45b8-8880-0f6e404a1b89)
 
-<h2 align = "center"> <font font face = "forte"> <a name="Langrage">  3.- Interpolación langrage </a></h2>
+<h2 align = "center"> <font font face = "forte">  <a name="Cuadratica"> 2.- Runge-Kutta </a></h2>
 
 <h3> <font font face = "arial"> DESCRIPCIÓN: </h3>
 
-La interpolación de Lagrange es una técnica fundamental en el campo de los métodos numéricos y es ampliamente utilizada en diversas áreas, como la aproximación de funciones, la predicción de valores intermedios y la resolución de problemas matemáticos y computacionales que requieren el ajuste preciso de curvas a datos conocidos.
+El método de Runge-Kutta es un conjunto de métodos numéricos iterativos que se utilizan para resolver EDOs. Estos métodos se basan en la expansión de la función en serie de Taylor y se utilizan para calcular la pendiente en varios puntos dentro del intervalo de integración. El método de Runge-Kutta es de orden 𝑛, donde 𝑛 es el orden del método. Los métodos de Runge-Kutta son más precisos que el método de Euler y se utilizan ampliamente en problemas que requieren una alta precisión. El método de Runge-Kutta de orden 4 es especialmente popular debido a su buena precisión y estabilidad.
    
 <h5> <font font face = "arial"> <b> <i> Ejemplo en código. </i> </b> </h5>
 
-      public class Ejercicio5 {
-        public static double interpolate(double[] x, double[] y, double xTarget) {
-        double result = 0;
+    /*
+      * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+      * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+    */
+     package Rugen_Kutta;
 
-        for (int i = 0; i < x.length; i++) {
-            double term = y[i];
-            for (int j = 0; j < x.length; j++) {
-                if (j != i) {
-                    term = term * (xTarget - x[j]) / (x[i] - x[j]);
-                }
-            }
-            result += term;
-        }
-
-        return result;
-    }
-
+    /**
+    *
+    * @author alons
+    */
+    public class E1 {
     public static void main(String[] args) {
-        double[] x = {1.1, 2.2, 3.3, 4.4, 5.5};
-    double[] y = {1.1, 3.1, 5.1, 7.1, 9.1};
-    double xTarget = 4.5;
+        // Ecuación diferencial: dy/dx = x^2 - y
+        // Condiciones iniciales: y(0) = 1
+        double x0 = 0, y0 = 1, x, y, h = 0.025, xEnd = 0.1;
+        int n = (int)((xEnd - x0) / h);
+        
+        x = x0;
+        y = y0;
+        
+        System.out.println("x\ty");
+        System.out.println(x + "\t" + y);
+        
+        for (int i = 0; i < n; i++) {
+            double k1 = h * dydx(x, y);
+            double k2 = h * dydx(x + 0.5 * h, y + 0.5 * k1);
+            double k3 = h * dydx(x + 0.5 * h, y + 0.5 * k2);
+            double k4 = h * dydx(x + h, y + k3);
+            
+            y = y + (k1 + 2*k2 + 2*k3 + k4) / 6;
+            x = x + h;
+            System.out.println(x + "\t" + y);
+         }
+       }
+    
+        public static double dydx(double x, double y) {
+        return x * x - y;
+          }
+       }
+ 
+![Screenshot 2024-05-28 233417](https://github.com/Hante990/Tema_6/assets/107586879/c9594910-de12-47a5-8109-85a09064a8d7)
 
-        double yTarget = interpolate(x, y, xTarget);
+<h2 align = "center"> <font font face = "forte"> <a name="Langrage">  3.- Taylor </a></h2>
 
-        System.out.println("El valor interpolado de y para x = " + xTarget + " es " + yTarget);
+<h3> <font font face = "arial"> DESCRIPCIÓN: </h3>
+
+El método de Taylor es una técnica para expandir una función en serie de Taylor, lo que permite aproximar la solución de una EDO. El método de Taylor se basa en la expansión de la función en serie de Taylor en torno a un punto y se utiliza para calcular la pendiente en ese punto. El método de Taylor es de orden 𝑛, donde 𝑛 es el orden de la expansión. Sin embargo, el método de Taylor no se utiliza comúnmente debido a que los métodos de Runge-Kutta de orden 𝑛 tienen la misma precisión que el método de Taylor de orden 𝑛, pero requieren menos evaluaciones de la función.
+   
+<h5> <font font face = "arial"> <b> <i> Ejemplo en código. </i> </b> </h5>
+
+     /*
+       * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+       * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+     */
+        package Taylor;
+
+      /**
+      *
+      * @author alons
+      */
+         public class E1 {
+         public static void main(String[] args) {
+        // Ecuación diferencial: dy/dx = x^2 - y
+        // Condiciones iniciales: y(0) = 1
+        double x0 = 0, y0 = 1, x, y, h = 0.025, xEnd = 0.1;
+        int n = (int)((xEnd - x0) / h);
+        
+        x = x0;
+        y = y0;
+        
+        System.out.println("x\ty");
+        System.out.println(x + "\t" + y);
+        
+        for (int i = 0; i < n; i++) {
+            double k1 = h * dydx(x, y);
+            double k2 = h * (dydx(x + h, y + k1));
+            
+            y = y + (k1 + k2) / 2;
+            x = x + h;
+            System.out.println(x + "\t" + y);
+        }
+    }
+    
+    public static double dydx(double x, double y) {
+        return x * x - y;
      }
     }
 
-![langrage](https://github.com/Hante990/Interpolaci-n2/assets/107586879/dd6934bc-7890-444a-b38d-b6dcecd0ac99)
+![Screenshot 2024-05-28 233815](https://github.com/Hante990/Tema_6/assets/107586879/49668357-7db1-4707-a52e-1c704bc75cc7)
